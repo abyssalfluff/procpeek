@@ -4,7 +4,7 @@
 
 `procpeek` is a command-line learning project that explores how Linux exposes information about running processes through the `/proc` virtual filesystem. It combines practical Python programming with Linux process inspection and is being developed incrementally.
 
-> **Status:** Early development. The current version reads and displays the full `/proc/<PID>/status` file for a process selected interactively.
+> **Status:** Early development. The current version reads `/proc/<PID>/status` for a process selected interactively and displays its name, state, PID, and parent PID.
 
 ## Current features
 
@@ -12,7 +12,7 @@
 - Rejects non-integer, zero, and negative PID inputs.
 - Checks whether the corresponding `/proc/<PID>` directory exists.
 - Asks for another PID when the input is invalid or the process is not found.
-- Reads and prints the raw contents of `/proc/<PID>/status`.
+- Reads `/proc/<PID>/status` and displays its `Name`, `State`, `Pid`, and `PPid` fields.
 - Uses only the Python standard library.
 
 ## Requirements
@@ -40,15 +40,12 @@ Enter the PID of an existing process when prompted.
 Enter PID: 24
 Process exists here: /proc/24
 Name:   cpuhp/1
-...
 State:  S (sleeping)
-...
 Pid:    24
 PPid:   2
-...
 ```
 
-*This is an abridged example from a Linux kernel thread; the current program prints the entire status file. PIDs, names, and other values depend on the running system.*
+*Example from a Linux kernel thread. PIDs, names, and other values depend on the running system.*
 
 ## How it works
 
@@ -60,7 +57,7 @@ Currently, `procpeek`:
 
 1. Validates the PID entered by the user.
 2. Checks for the corresponding `/proc/<PID>` path using `os.path.exists()`.
-3. Opens `/proc/<PID>/status` and prints its contents.
+3. Opens `/proc/<PID>/status` and prints only the lines beginning with `Name:`, `State:`, `Pid:`, or `PPid:`.
 
 Processes can exit at any time, including between the existence check and the file read. Handling that situation gracefully is a planned improvement.
 
@@ -69,7 +66,7 @@ Processes can exit at any time, including between the existence check and the fi
 - [x] Validate interactive PID input
 - [x] Check whether a process exists under `/proc`
 - [x] Read and display `/proc/<PID>/status`
-- [ ] Extract selected fields: `Name`, `Pid`, `PPid`, and `State`
+- [x] Extract selected fields: `Name`, `Pid`, `PPid`, and `State`
 - [ ] Parse fields into structured Python data and format the output
 - [ ] Organize the program into focused functions
 - [ ] Inspect additional process details, including executable paths
