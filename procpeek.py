@@ -15,7 +15,12 @@ while pidFlag == False:
 
                 with open(f"{processPath}/status", "r") as file:
                     content = file.read()
-                print(content)
+                for line in content.splitlines():
+                    if (line.startswith("Name:") or
+                        line.startswith("State:") or
+                        line.startswith("Pid:") or
+                        line.startswith("PPid:")):
+                        print(line)
                 pidFlag = True
 
             else:
